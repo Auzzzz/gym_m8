@@ -1,7 +1,9 @@
+import { SignInButton, UserButton } from "@clerk/nextjs";
 import styles from "./index.module.css";
 import Head from "next/head";
 import Link from "next/link";
 import { api } from "~/utils/api";
+import { SignIn } from "@clerk/clerk-react";
 
 export default function Home() {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
@@ -18,6 +20,7 @@ export default function Home() {
           <h1 className={styles.title}>
             Create <span className={styles.pinkSpan}>T3</span> App
           </h1>
+
           <div className={styles.cardRow}>
             <Link
               className={styles.card}
