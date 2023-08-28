@@ -11,7 +11,7 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 
 import { NavigationDisplay } from "./Navigation/Navigation_Display";
-import { Divider } from "@mui/material";
+import { Divider, Grid } from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -139,7 +139,9 @@ export const Layout = (props: layoutDrawerProps) => {
           {props.header}
         </Typography>
         <Divider sx={{ my: 1 }} />
+        <Grid sx={{ mt: 2 }}>
         {props.children}
+        </Grid>
       </Box>
     </Box>
   );
