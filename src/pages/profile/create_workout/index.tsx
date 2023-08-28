@@ -7,6 +7,7 @@ import { z } from "zod";
 import { Box, Button, Grid, TextField } from "@mui/material";
 import { Label, Search } from "@mui/icons-material";
 import Search_Exercises_Result from "~/components/Profile/workouts/Search_Exercises_Results";
+import { api } from "~/utils/api";
 
 type ValidationSchema = z.infer<typeof workoutComponentsValidationSchema>;
 
@@ -22,7 +23,9 @@ export type AddedExercise = {
 };
 
 function CreateWorkout() {
-  const [search, setSearch] = useState("");
+  const [inputName, setInput] = useState("");
+  const {data, isLoading: componentsLoading } = api.exercises.getByContains.useQuery({inputName});
+
 
   const {
     register,
@@ -39,13 +42,12 @@ function CreateWorkout() {
 
   const handleExercisesOnChange = async (e: any) => {
     e.preventDefault();
-    setSearch(e.target.value);
-    await awaitTimeout(500);
+    await awaitTimeout(1500);
+    setInput(e.target.value);
+    
   };
 
-
-//   const {data, isLoading: componentsLoading }} = api.workoutType.getByContains.useQuery({ search });
-
+  console.log(data);
   return (
     <Layout header="Create a Workout">
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -81,6 +83,12 @@ function CreateWorkout() {
             <p> TODO: MAKE WORKOUT LABELS </p>
           </Grid>
 
+          {/* TODO: add in list of added exercises */}
+
+          <Grid item xs={12}>
+            <Button type="submit">Submit</Button>
+          </Grid>
+
           <Grid item xs={12}>
             <TextField
               label="Search for Exercises"
@@ -92,14 +100,17 @@ function CreateWorkout() {
 
             <Grid item xs={12}>
               <Grid container spacing={2} sx={{ mt: 1 }}>
-                <Search_Exercises_Result Search={search} />
+ 
+                {data?.map((exercise) => (
+                    <Search_Exercises_Result {...exercise} key={exercise.id}/>
+                ))}
+
+                
               </Grid>
             </Grid>
           </Grid>
 
-          <Grid item xs={12}>
-            <Button type="submit">Submit</Button>
-          </Grid>
+          
         </Grid>
       </form>
     </Layout>

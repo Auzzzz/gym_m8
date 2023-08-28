@@ -12,7 +12,7 @@ import React from "react";
 
 const Search_Exercises_Result = (props: any) => {
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 345, m:3 }}>
       <CardActionArea>
         <CardMedia
           component="img"
@@ -21,14 +21,14 @@ const Search_Exercises_Result = (props: any) => {
           alt="workout gif"
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography gutterBottom variant="h5" component="div" sx={{textTransform: 'capitalize'}} >
             {props.name}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="text.secondary" sx={{textTransform: 'capitalize'}} >
             {props.description}
           </Typography>
-          <Chip label={"Target: " + props.target} />{" "}
-          <Chip label={"Equipment: " + props.equipment} />
+          <Chip sx={{textTransform: 'capitalize'}} label={"Target: " + props.target} />{" "}
+          <Chip sx={{textTransform: 'capitalize'}} label={"Equipment: " + props.equipment} />
         </CardContent>
       </CardActionArea>
       <CardActions>
