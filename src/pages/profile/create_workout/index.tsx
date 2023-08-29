@@ -8,6 +8,7 @@ import { Box, Button, Grid, TextField } from "@mui/material";
 import { Label, Search } from "@mui/icons-material";
 import Search_Exercises_Result from "~/components/Profile/workouts/Search_Exercises_Results";
 import { api } from "~/utils/api";
+import { Exercises } from "@prisma/client";
 
 type ValidationSchema = z.infer<typeof workoutComponentsValidationSchema>;
 
@@ -20,12 +21,14 @@ export type AddedExercise = {
   rest: Number;
   time: Number;
   notes: String;
+  target: String;
 };
 
 function CreateWorkout() {
   const [inputName, setInput] = useState("");
-  const {data, isLoading: componentsLoading } = api.exercises.getByContains.useQuery({inputName});
-
+  const { data, isLoading: componentsLoading } =
+    api.exercises.getByContains.useQuery({ inputName });
+  const [exercises, setExercises] = useState<AddedExercise[]>([]);
 
   const {
     register,
@@ -44,10 +47,26 @@ function CreateWorkout() {
     e.preventDefault();
     await awaitTimeout(1500);
     setInput(e.target.value);
-    
   };
 
-  console.log(data);
+  const handleExercisesOnSubmit = (addExercises: Exercises) => {
+
+    const newExercise: AddedExercise = {
+        id: addExercises.id,
+        name: addExercises.name,
+        sets: 0,
+        reps: 0,
+        weight: 0,
+        rest: 0,
+        time: 0,
+        notes: "",
+        target: addExercises.target,
+    }
+
+    setExercises((current) => [...current, newExercise]);
+
+  };
+
   return (
     <Layout header="Create a Workout">
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -85,6 +104,8 @@ function CreateWorkout() {
 
           {/* TODO: add in list of added exercises */}
 
+          {JSON.stringify(exercises)}
+
           <Grid item xs={12}>
             <Button type="submit">Submit</Button>
           </Grid>
@@ -98,19 +119,31 @@ function CreateWorkout() {
               sx={{ mt: 2 }}
             />
 
+            
+
             <Grid item xs={12}>
               <Grid container spacing={2} sx={{ mt: 1 }}>
- 
                 {data?.map((exercise) => (
-                    <Search_Exercises_Result {...exercise} key={exercise.id}/>
+                  // <Search_Exercises_Result {...exercise} key={exercise.id} handleExercisesOnSubmit={handleExercisesOnSubmit}/>
+                  <Search_Exercises_Result
+                    exercise={{
+                      id: exercise.id,
+                      bodyPart: exercise.bodyPart,
+                      equipment: exercise.equipment,
+                      gifUrl: exercise.gifUrl,
+                      name: exercise.name,
+                      target: exercise.target,
+                      description: exercise.description,
+                      videoUrl: exercise.videoUrl,
+                    }}
+                    {...exercise}
+                    key={exercise.id}
+                    handleExercisesOnSubmit={handleExercisesOnSubmit}
+                  />
                 ))}
-
-                
               </Grid>
             </Grid>
           </Grid>
-
-          
         </Grid>
       </form>
     </Layout>
