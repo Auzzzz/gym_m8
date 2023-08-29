@@ -6,7 +6,7 @@ export const exercisesRouter = createTRPCRouter({
     .input(z.object({ inputName: z.string() }))
     .query(async ({ ctx, input }) => {
       const workoutTypes = await ctx.prisma.exercises.findMany({
-        take: 15,
+        take: 40,
         orderBy: { name: "asc" },
         where: {  
           name: {

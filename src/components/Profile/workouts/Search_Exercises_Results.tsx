@@ -11,24 +11,19 @@ import {
 import { Exercises } from "@prisma/client";
 import React from "react";
 
-  
 type Props = {
   exercise: Exercises;
   handleExercisesOnSubmit: (selected: Exercises) => void;
 };
 
-
-// const Search_Exercises_Result = (props, {onAdd}) => {
-  // function Search_Exercises_Result(props: Exercises, {handleAClick}: {handleAClick: (selected: Exercises) => void}) {
-    // function Search_Exercises_Result(props: Exercises, {handleAClick}: {handleAClick: (num: number) => void}) {
-function Search_Exercises_Result({exercise, handleExercisesOnSubmit}: Props) {
+function Search_Exercises_Result({ exercise, handleExercisesOnSubmit }: Props) {
   const onSelect = (selected: Exercises) => {
-    console.log(selected)
-    console.log(typeof selected)
-  }
+    console.log(selected);
+    console.log(typeof selected);
+  };
 
   return (
-    <Card sx={{ maxWidth: 345, m:3 }}>
+    <Card sx={{ maxWidth: 345, m: 3 }}>
       <CardActionArea>
         <CardMedia
           component="img"
@@ -37,14 +32,29 @@ function Search_Exercises_Result({exercise, handleExercisesOnSubmit}: Props) {
           alt="workout gif"
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div" sx={{textTransform: 'capitalize'}} >
+          <Typography
+            gutterBottom
+            variant="h5"
+            component="div"
+            sx={{ textTransform: "capitalize" }}
+          >
             {exercise.name}
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{textTransform: 'capitalize'}} >
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ textTransform: "capitalize" }}
+          >
             {exercise.description}
           </Typography>
-          <Chip sx={{textTransform: 'capitalize'}} label={"Target: " + exercise.target} />{" "}
-          <Chip sx={{textTransform: 'capitalize'}} label={"Equipment: " + exercise.equipment} />
+          <Chip
+            sx={{ textTransform: "capitalize" }}
+            label={"Target: " + exercise.target}
+          />{" "}
+          <Chip
+            sx={{ textTransform: "capitalize" }}
+            label={"Equipment: " + exercise.equipment}
+          />
         </CardContent>
       </CardActionArea>
       <CardActions>
@@ -55,11 +65,9 @@ function Search_Exercises_Result({exercise, handleExercisesOnSubmit}: Props) {
         >
           Add to Workout
         </Button>
-        {/* <button onClick={e => handleAClick(100)}>Click</button> */}
-
       </CardActions>
     </Card>
   );
-};
+}
 
 export default Search_Exercises_Result;

@@ -9,6 +9,7 @@ import { Label, Search } from "@mui/icons-material";
 import Search_Exercises_Result from "~/components/Profile/workouts/Search_Exercises_Results";
 import { api } from "~/utils/api";
 import { Exercises } from "@prisma/client";
+import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 
 type ValidationSchema = z.infer<typeof workoutComponentsValidationSchema>;
 
@@ -48,23 +49,31 @@ function CreateWorkout() {
     await awaitTimeout(1500);
     setInput(e.target.value);
   };
+  const columns: GridColDef[] = [
+    { field: "name", headerName: "Exercise Name" },
+    { field: "target", headerName: "Target" },
+    { field: "sets", headerName: "Sets" },
+    { field: "reps", headerName: "Reps" },
+    { field: "weight", headerName: "Weight" },
+    { field: "rest", headerName: "Rest" },
+    { field: "time", headerName: "Time" },
+    { field: "notes", headerName: "Notes" },
+  ];
 
   const handleExercisesOnSubmit = (addExercises: Exercises) => {
-
     const newExercise: AddedExercise = {
-        id: addExercises.id,
-        name: addExercises.name,
-        sets: 0,
-        reps: 0,
-        weight: 0,
-        rest: 0,
-        time: 0,
-        notes: "",
-        target: addExercises.target,
-    }
+      id: addExercises.id,
+      name: addExercises.name,
+      sets: 0,
+      reps: 0,
+      weight: 0,
+      rest: 0,
+      time: 0,
+      notes: "",
+      target: addExercises.target,
+    };
 
     setExercises((current) => [...current, newExercise]);
-
   };
 
   return (
@@ -101,11 +110,14 @@ function CreateWorkout() {
           <Grid item sm={6} xs={12}>
             <p> TODO: MAKE WORKOUT LABELS </p>
           </Grid>
-
+          <Grid item xs={12}>
           {/* TODO: add in list of added exercises */}
-
-          {JSON.stringify(exercises)}
-
+          {exercises.length > 0 ? (
+            <DataGrid rows={exercises} columns={columns} checkboxSelection />
+          ) : (
+            <p> Add exercises below </p>
+          )}
+            </Grid>
           <Grid item xs={12}>
             <Button type="submit">Submit</Button>
           </Grid>
@@ -118,8 +130,6 @@ function CreateWorkout() {
               onChange={handleExercisesOnChange}
               sx={{ mt: 2 }}
             />
-
-            
 
             <Grid item xs={12}>
               <Grid container spacing={2} sx={{ mt: 1 }}>
