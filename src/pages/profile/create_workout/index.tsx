@@ -9,11 +9,25 @@ import { Label, Search } from "@mui/icons-material";
 import Search_Exercises_Result from "~/components/Profile/workouts/Search_Exercises_Results";
 import { api } from "~/utils/api";
 import { Exercises } from "@prisma/client";
-import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Close";
+import {
+  DataGrid,
+  GridActionsCellItem,
+  GridColDef,
+  GridRowModes,
+  GridRowModesModel,
+  GridValueGetterParams,
+} from "@mui/x-data-grid";
+import Workout_DataGrid from "~/components/Profile/workouts/Workout_DataGrid";
 
 type ValidationSchema = z.infer<typeof workoutComponentsValidationSchema>;
 
 export type AddedExercise = {
+  isNew: boolean;
   id: String;
   name: String;
   sets: Number;
@@ -30,6 +44,9 @@ function CreateWorkout() {
   const { data, isLoading: componentsLoading } =
     api.exercises.getByContains.useQuery({ inputName });
   const [exercises, setExercises] = useState<AddedExercise[]>([]);
+  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
+    {}
+  );
 
   const {
     register,
@@ -49,17 +66,20 @@ function CreateWorkout() {
     await awaitTimeout(1500);
     setInput(e.target.value);
   };
+
+  // Set Column Definitions excluding actions column this is set in the Workout_DataGrid component
   const columns: GridColDef[] = [
-    { field: "name", headerName: "Exercise Name" },
-    { field: "target", headerName: "Target" },
-    { field: "sets", headerName: "Sets" },
-    { field: "reps", headerName: "Reps" },
-    { field: "weight", headerName: "Weight" },
-    { field: "rest", headerName: "Rest" },
-    { field: "time", headerName: "Time" },
-    { field: "notes", headerName: "Notes" },
+    { field: "name", headerName: "Exercise Name", width: 180, editable: false },
+    { field: "target", headerName: "Target", width: 80, editable: false },
+    { field: "sets", headerName: "Sets", editable: true, },
+    { field: "reps", headerName: "Reps", editable: true, },
+    { field: "weight", headerName: "Weight", editable: true, },
+    { field: "rest", headerName: "Rest", editable: true, },
+    { field: "time", headerName: "Time", editable: true, },
+    { field: "notes", headerName: "Notes", editable: true, },
   ];
 
+  // Addding a new exercise to the workout this is then replicated as a row in the data grid
   const handleExercisesOnSubmit = (addExercises: Exercises) => {
     const newExercise: AddedExercise = {
       id: addExercises.id,
@@ -71,10 +91,13 @@ function CreateWorkout() {
       time: 0,
       notes: "",
       target: addExercises.target,
+      isNew: true,
     };
 
     setExercises((current) => [...current, newExercise]);
   };
+
+  console.log("exercises", exercises);
 
   return (
     <Layout header="Create a Workout">
@@ -111,13 +134,16 @@ function CreateWorkout() {
             <p> TODO: MAKE WORKOUT LABELS </p>
           </Grid>
           <Grid item xs={12}>
-          {/* TODO: add in list of added exercises */}
-          {exercises.length > 0 ? (
-            <DataGrid rows={exercises} columns={columns} checkboxSelection />
-          ) : (
-            <p> Add exercises below </p>
-          )}
-            </Grid>
+            {exercises.length > 0 ? (
+              <Workout_DataGrid
+              rows={exercises}
+              column={columns}
+              setExercises={setExercises}
+            />
+            ) : (
+              <p> Add exercises below </p>
+            )}
+          </Grid>
           <Grid item xs={12}>
             <Button type="submit">Submit</Button>
           </Grid>
