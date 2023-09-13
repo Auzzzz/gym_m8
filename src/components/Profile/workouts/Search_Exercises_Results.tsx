@@ -14,13 +14,10 @@ import React from "react";
 type Props = {
   exercise: Exercises;
   handleExercisesOnSubmit: (selected: Exercises) => void;
+  isPosting: boolean;
 };
 
-function Search_Exercises_Result({ exercise, handleExercisesOnSubmit }: Props) {
-  const onSelect = (selected: Exercises) => {
-    console.log(selected);
-    console.log(typeof selected);
-  };
+function Search_Exercises_Result({ exercise, handleExercisesOnSubmit, isPosting }: Props) {
 
   return (
     <Card sx={{ maxWidth: 345, m: 3 }}>
@@ -62,6 +59,7 @@ function Search_Exercises_Result({ exercise, handleExercisesOnSubmit }: Props) {
           size="small"
           color="primary"
           onClick={() => handleExercisesOnSubmit({ ...exercise })}
+          disabled={isPosting}
         >
           Add to Workout
         </Button>

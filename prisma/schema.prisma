@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -12,12 +12,50 @@ datasource db {
 }
 
 model Exercises {
-    id          String @id @default(cuid())
-    bodyPart    String
-    equipment   String
-    gifUrl      String
-    name        String
-    target      String
-    description String
-    videoUrl    String
+  id          String @id @default(cuid())
+  bodyPart    String
+  equipment   String
+  gifUrl      String
+  name        String
+  target      String
+  description String
+  videoUrl    String
+
+  Predefined_Workout_Exercise Predefined_Workout_Exercise[]
 }
+
+model Exercises_Tags_Default {
+  id  String @id @default(cuid())
+  tag String
+
+}
+
+model Predefined_Workout {
+  id          String  @id @default(cuid())
+  name        String
+  description String
+  isPublic    Boolean
+  user        String
+  createdAt   DateTime @default(now())
+
+  Predefined_Workout_Exercise Predefined_Workout_Exercise[]
+}
+
+model Predefined_Workout_Exercise {
+  id                 String @id @default(cuid())
+  sets               Int
+  reps               Int
+  rest               Int
+  time               Int
+  notes              String
+  weight             Int
+
+  Exercises          Exercises @relation(fields: [exerciseId], references: [id])
+  exerciseId         String
+  @@index([exerciseId], name: "exerciseId")
+
+  Predefined_Workout Predefined_Workout @relation(fields: [predefinedWorkoutId], references: [id])
+  predefinedWorkoutId String
+  @@index([predefinedWorkoutId], name: "predefinedWorkoutId")
+}
+
