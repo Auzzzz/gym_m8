@@ -26,13 +26,24 @@ export const preWorkoutRouter = createTRPCRouter({
     }),
 
   get: privateProcedure
-    .input(z.string().min(32).max(32))
-    .mutation(async ({ ctx, input }) => {
+    .query(async ({ ctx }) => {
       const pre_workouts = await ctx.prisma.predefined_Workout.findMany({
         where: {
           user: ctx.userId,
         },
+        // include: {
+        //   Predefined_Workout_Exercise: true
+        // }
+        include: {
+          Predefined_Workout_Exercise: {
+            include: {
+              Exercises: true
+            }
+          }
+        }
+        
       });
+
       return pre_workouts;
     }),
   
@@ -73,8 +84,6 @@ export const preWorkoutRouter = createTRPCRouter({
 
 
     // PreWorkout_Exercises
-
-    
   nestedCreate: privateProcedure
   .input(
     z.object({
@@ -102,12 +111,8 @@ export const preWorkoutRouter = createTRPCRouter({
         user: ctx.userId,
         Predefined_Workout_Exercise: {
           create: input.Predefined_Workout_Exercise
-            // {sets: 3, reps: 1, rest: 1, time: 3, notes: "test3", weight: -1, exerciseId: "0003", Predefined_Workout: {connect: {id: "0003"}}},
-          
         }
     }});
-    console.log("input", input);
-    console.log(result);
     return result;
   }),
 

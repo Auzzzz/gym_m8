@@ -40,6 +40,12 @@ export type AddedExercise = {
   target: string;
 };
 
+// TODO: Add tags to workout
+// TODO: Make is public switch work
+// TODO: User feedback
+// TODO: Add error handling w/ try catch
+// TODO: Redirect to ind workout page on success
+
 function CreateWorkout() {
   const [inputName, setInput] = useState("");
   const { data, isLoading: componentsLoading } =

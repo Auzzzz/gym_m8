@@ -30,33 +30,17 @@ export const navigationBody = (): navigation => {
       icon: <AccountBoxIcon />,
     },
     {
-      id: "2",
-      sectionTitle: "Test",
-    },
-    {
-      id: "3",
-      title: "Profile",
-      path: "/profile",
-      icon: <AccountBoxIcon />,
-    },
-    {
       dropNavItems: [
         {
           id: "3.1",
           title: "Create a Workout",
-          path: "/profile/userworkout",
+          path: "/profile/create_workout",
           icon: <AccountBoxIcon />,
         },
         {
           id: "3.2",
-          title: "Profile 2",
-          path: "/profile2",
-          icon: <AccountBoxIcon />,
-        },
-        {
-          id: "3.3",
-          title: "Profile 3",
-          path: "/profile3",
+          title: "Created Workouts",
+          path: "/profile/created_workouts",
           icon: <AccountBoxIcon />,
         },
       ], id: "3",

@@ -20,10 +20,6 @@ export const NavigationDropdown = (props: dropNavSections) => {
   const { dropNavItems, defaultOpen } = props;
   const [open, setOpen] = React.useState(defaultOpen);
 
-  useEffect(() => {
-    console.log(props.defaultOpen)
-  });
-
   const handleClick = () => {
     setOpen(!open);
   };
